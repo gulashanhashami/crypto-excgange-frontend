@@ -5,13 +5,13 @@ import styled from "styled-components";
 
 
 const ResultDiv=styled.div`
-.contain{
+/* .contain{
   width:85%;
   height:150vh;
   margin: auto;
    overflow-y:scroll;
-  /* border:2px solid red; */
-}
+  border:2px solid red;
+} */
 
 
 #head{
@@ -73,10 +73,9 @@ p{
 }
 .sbox{
   width: 53%;
-  height: 13vh;
+  height: 8vh;
   display: flex;
-  margin-top: 3%;
-  margin-left: 16%;
+  margin-left: 10%;
   flex-direction: row;
   justify-content:space-between;
   align-items: center;
@@ -84,7 +83,7 @@ p{
 }
 .search-input{
   width: 85.7%;
-  height: 6.2vh;
+  height: 4.2vh;
  font-size: 1vw;
  padding-left: 2%;
   outline: none;
@@ -93,7 +92,7 @@ p{
 .search-button{
   width: 13.2%;
 
-  height: 7.4vh;
+  height: 5.2vh;
   font-size:1vw;
  
   color: white;
@@ -132,6 +131,27 @@ p{
   background-color: white;
   color: red;
 }
+#topdiv{
+  width: 80%;
+  margin-top: 3%;
+  height:6.5vh;
+  margin-left: 5%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: row;
+  /* border: 2px solid blue; */
+
+}
+#sort{
+  width: 25%;
+  height: 4vh;
+  font-size: 1vw;
+  color: white;
+  border: 1px solid teal;
+  border-radius: .5vw;
+  background-color: teal;
+}
 
 `;
 export const CryptoExchange=()=>{
@@ -139,24 +159,25 @@ export const CryptoExchange=()=>{
   const [sdata, setSd]= useState("");
   const [page, setPage]= useState(1);
   const [fdata1, setData1]= useState([])
-    useEffect(()=>{
-      getdata();
-    }, [])
-
+    
     useEffect(()=>{
       getdata1();
     }, [])
 
+    //**fetch the exchange data and show on browser***//
   const getdata1=()=>{
-        axios.get(`http://localhost:2345/products`).then(({data})=>{
+        axios.get(`http://localhost:2345/products?_page=${page}&_limit=10`).then(({data})=>{
             // console.log(data)
             setData1(data);
         })
     }
 
-  const requestOne = axios.get("https://rest.coinapi.io/v1/exchanges?apikey=3D03B0F7-8BD6-4F3C-AE17-819CD470F359");
-const requestTwo = axios.get("https://rest.coinapi.io/v1/exchanges?apikey=3D03B0F7-8BD6-4F3C-AE17-819CD470F359");
+
+
+  //**fetch the data and store on Mongodb Atlas**//
   const getdata=()=>{
+    const requestOne = axios.get("https://rest.coinapi.io/v1/exchanges?apikey=0D4AF76B-110F-4018-92CF-31FC0D24DD04");
+const requestTwo = axios.get("https://rest.coinapi.io/v1/exchanges/icons/32?apikey=0D4AF76B-110F-4018-92CF-31FC0D24DD04");
     axios.all([requestOne, requestTwo]).then(axios.spread((...res)=>{
       const responseOne = res[0].data
   const responseTwo = res[1].data
@@ -167,18 +188,19 @@ const requestTwo = axios.get("https://rest.coinapi.io/v1/exchanges?apikey=3D03B0
 }
 //  console.log(fdata)
     const handleSearch=()=>{
+      getdata()
       var arr=fdata.filter((value)=>{
         if(sdata===""){
           // console.log(value)
            return value;
         }
-        else if(value.exchange_id.toLowerCase()===(sdata.toLocaleLowerCase())){
+        else if(value.exchange_id.toLowerCase()===(sdata.toLowerCase())){
         
            return value;
         }
       })
       setData(arr);
-     axios.post("http://localhost:2345/products", {
+     axios.post("http://localhost:2345/products", { //store data on Mongodb Atlas
        name:arr[0].name,
        data_symbols_count:arr[0].data_symbols_count,
        data_start: arr[0].data_start,
@@ -190,12 +212,24 @@ const requestTwo = axios.get("https://rest.coinapi.io/v1/exchanges?apikey=3D03B0
     }).then((res)=>{
           //  console.log(res)  
      })
-      // console.log(arr)
-    }
-    // console.log(fdata)
     
+    }
+    
+ function handleChange(e){
+   if(e.target.value==="low"){
+     var arr4=fdata1.sort((a,b)=>(a.volume_1day_usd)-(b.volume_1day_usd))
+     setData1(arr4)
+   }
+   else if(e.target.value==="high"){
+    var arr5=fdata1.sort((a,b)=>(b.volume_1day_usd)-(a.volume_1day_usd))
+    setData1(arr5)
+  }
+ }
+//  console.log(fdata1)
+
   return (
     <ResultDiv>
+      <div id="topdiv">
       <div className='sbox'>
       <input type="text" className='search-input' onChange={(e)=>setSd(e.target.value)} placeholder='Search for exchange' />
       <button className='search-button' onClick={()=>{
@@ -203,9 +237,17 @@ const requestTwo = axios.get("https://rest.coinapi.io/v1/exchanges?apikey=3D03B0
        
       }
       }>Search</button>
+      
+      </div>
+      <select onChange={handleChange} id="sort">
+        <option value="">Sort by trade volume</option>
+        <option value="low">Low to high</option>
+        <option value="high">High to low</option>
+       
+      </select>
       </div>
       <br />
-      {(fdata.length===0)?(
+      {(fdata1.length===0)?(
           <h2>Loading...</h2>
        ):(
     <div className='contain'> 
@@ -213,9 +255,9 @@ const requestTwo = axios.get("https://rest.coinapi.io/v1/exchanges?apikey=3D03B0
       <h2>EXCHANGES</h2>
       <h2>24H TRADE VOLUME</h2>
     </div>
-    {fdata1.map((coin)=>{
+    {fdata1.map((coin)=>{      //map the exchange data and show on browser
       return (
-        <div className='count-list-3' key={coin.id}>
+        <div className='count-list-3' key={coin._id}>
            <div id='coinlist'>
            <div className='imgbox'>
              <img className='img1' src={coin.url} alt="" />
@@ -224,7 +266,7 @@ const requestTwo = axios.get("https://rest.coinapi.io/v1/exchanges?apikey=3D03B0
            <p >{coin.name}</p>
            </div>
            </div>
-            <p>${coin.total_volume}</p>
+            <p>${coin.volume_1day_usd}</p>
           </div>
       )
     })}
