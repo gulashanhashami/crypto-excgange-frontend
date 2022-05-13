@@ -2,7 +2,7 @@ import React from 'react';
 import {useEffect, useState} from "react";
 import axios from "axios";
 import styled from "styled-components";
-import { isDisabled } from '@testing-library/user-event/dist/utils';
+
 
 const ResultDiv=styled.div`
 .contain{
@@ -104,7 +104,7 @@ p{
   background-color: white;
   color: red;
   font-size:1vw;
-  /* font-weight: bold; */
+
 }
 .btndiv{
   width: 30%;
@@ -119,7 +119,7 @@ p{
 .pagebtn{
   width: 40%;
   height: 6vh;
-  /* margin-left:5vh; */
+
   color: white;
   font-size: 1vw;
   font-weight: bold;
