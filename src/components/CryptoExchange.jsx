@@ -134,7 +134,7 @@ p{
   /* border: 2px solid blue; */
 
 }
-#sort{
+#sortb{
   width: 25%;
   height: 4vh;
   font-size: 1vw;
@@ -144,7 +144,7 @@ p{
   background-color: teal;
 }
 #load{
-  margin: auto;
+  margin-left: 30%;
 }
 
 `;
@@ -176,7 +176,6 @@ const requestTwo = axios.get("https://rest.coinapi.io/v1/exchanges/icons/32?apik
       const responseOne = res[0].data
   const responseTwo = res[1].data
   var arr3=[...responseOne, ...responseTwo]
-        // console.log(arr3[1].image)
         setData(arr3);
     }))
 }
@@ -237,7 +236,7 @@ const requestTwo = axios.get("https://rest.coinapi.io/v1/exchanges/icons/32?apik
       }>Search</button>
       
       </div>
-      <select id="sort" onChange={handleChange}>
+      <select id="sortb" onChange={handleChange}>
         <option value="">Sort by trade volume</option>
         <option value="low">Low to high</option>
         <option value="high">High to low</option>
