@@ -5,15 +5,6 @@ import styled from "styled-components";
 
 
 const ResultDiv=styled.div`
-/* .contain{
-  width:85%;
-  height:150vh;
-  margin: auto;
-   overflow-y:scroll;
-  border:2px solid red;
-} */
-
-
 #head{
   width:80% ;
   height: 6.5vh;
@@ -152,6 +143,9 @@ p{
   border-radius: .5vw;
   background-color: teal;
 }
+#load{
+  margin: auto;
+}
 
 `;
 export const CryptoExchange=()=>{
@@ -162,11 +156,11 @@ export const CryptoExchange=()=>{
     
     useEffect(()=>{
       getdata1();
-    }, [])
+    }, [page])
 
     //**fetch the exchange data and show on browser***//
   const getdata1=()=>{
-        axios.get(`http://localhost:2345/products?_page=${page}&_limit=10`).then(({data})=>{
+        axios.get(`http://localhost:2345/products?_page=${page}&_limit=3`).then(({data})=>{
             // console.log(data)
             setData1(data);
         })
@@ -214,14 +208,18 @@ const requestTwo = axios.get("https://rest.coinapi.io/v1/exchanges/icons/32?apik
      })
     
     }
-    
+    //
  function handleChange(e){
    if(e.target.value==="low"){
-     var arr4=fdata1.sort((a,b)=>(a.volume_1day_usd)-(b.volume_1day_usd))
+     var arr4=fdata1.sort(function(a,b){
+       return a.volume_1day_usd-b.volume_1day_usd;
+     })
      setData1(arr4)
    }
    else if(e.target.value==="high"){
-    var arr5=fdata1.sort((a,b)=>(b.volume_1day_usd)-(a.volume_1day_usd))
+    var arr5=fdata1.sort(function(a,b){
+      return b.volume_1day_usd-a.volume_1day_usd;
+    })
     setData1(arr5)
   }
  }
@@ -239,7 +237,7 @@ const requestTwo = axios.get("https://rest.coinapi.io/v1/exchanges/icons/32?apik
       }>Search</button>
       
       </div>
-      <select onChange={handleChange} id="sort">
+      <select id="sort" onChange={handleChange}>
         <option value="">Sort by trade volume</option>
         <option value="low">Low to high</option>
         <option value="high">High to low</option>
@@ -248,7 +246,7 @@ const requestTwo = axios.get("https://rest.coinapi.io/v1/exchanges/icons/32?apik
       </div>
       <br />
       {(fdata1.length===0)?(
-          <h2>Loading...</h2>
+          <h2 id='load'>Loading...</h2>
        ):(
     <div className='contain'> 
     <div id='head'>
