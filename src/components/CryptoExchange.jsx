@@ -153,14 +153,14 @@ export const CryptoExchange=()=>{
   const [sdata, setSd]= useState("");
   const [page, setPage]= useState(1);
   const [fdata1, setData1]= useState([])
-    
-    useEffect(()=>{
+ 
+    useEffect(()=>{  
       getdata1();
     }, [page])
 
     //**fetch the exchange data and show on browser***//
   const getdata1=()=>{
-
+  
         axios.get(`http://localhost:2345/products?page=${page}&&size=10`).then(({data})=>{
             // console.log(data.products)
             setData1(data.products);
@@ -215,7 +215,7 @@ const requestTwo = axios.get("https://rest.coinapi.io/v1/exchanges/icons/32?apik
      var arr4=fdata1.sort((a,b)=>a.volume_1day_usd-b.volume_1day_usd);
      setData1(arr4)
    }
-   else if(e.target.value==="high"){
+   if(e.target.value==="high"){
     var arr5=fdata1.sort((a,b)=>b.volume_1day_usd-a.volume_1day_usd);
     setData1(arr5)
   }
@@ -267,8 +267,9 @@ const requestTwo = axios.get("https://rest.coinapi.io/v1/exchanges/icons/32?apik
     })}
 
    <div className='btndiv'>
-   <button className="pagebtn"
+   <button className="pagebtn"  
    onClick={() => {
+   
   setPage(page-1);
    }}
  >
