@@ -131,7 +131,7 @@ p{
   align-items: center;
   justify-content: space-between;
   flex-direction: row;
-  /* border: 2px solid blue; */
+
 
 }
 #sortb{
