@@ -160,9 +160,11 @@ export const CryptoExchange=()=>{
 
     //**fetch the exchange data and show on browser***//
   const getdata1=()=>{
+
         axios.get(`http://localhost:2345/products?page=${page}&&size=10`).then(({data})=>{
             // console.log(data.products)
             setData1(data.products);
+       
         })
     }
 
