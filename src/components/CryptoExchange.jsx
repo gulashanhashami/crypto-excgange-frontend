@@ -160,9 +160,9 @@ export const CryptoExchange=()=>{
 
     //**fetch the exchange data and show on browser***//
   const getdata1=()=>{
-        axios.get(`http://localhost:2345/products?_page=${page}&_limit=3`).then(({data})=>{
-            // console.log(data)
-            setData1(data);
+        axios.get(`http://localhost:2345/products?page=${page}&&size=10`).then(({data})=>{
+            // console.log(data.products)
+            setData1(data.products);
         })
     }
 
@@ -170,8 +170,8 @@ export const CryptoExchange=()=>{
 
   //**fetch the data and store on Mongodb Atlas**//
   const getdata=()=>{
-    const requestOne = axios.get("https://rest.coinapi.io/v1/exchanges?apikey=0D4AF76B-110F-4018-92CF-31FC0D24DD04");
-const requestTwo = axios.get("https://rest.coinapi.io/v1/exchanges/icons/32?apikey=0D4AF76B-110F-4018-92CF-31FC0D24DD04");
+    const requestOne = axios.get("https://rest.coinapi.io/v1/exchanges?apikey=CC1B748B-76FF-4F94-8544-E5B3C6C543F4");
+const requestTwo = axios.get("https://rest.coinapi.io/v1/exchanges/icons/32?apikey=CC1B748B-76FF-4F94-8544-E5B3C6C543F4");
     axios.all([requestOne, requestTwo]).then(axios.spread((...res)=>{
       const responseOne = res[0].data
   const responseTwo = res[1].data
@@ -179,7 +179,7 @@ const requestTwo = axios.get("https://rest.coinapi.io/v1/exchanges/icons/32?apik
         setData(arr3);
     }))
 }
-//  console.log(fdata)
+//  console.log(fdata1)
     const handleSearch=()=>{
       getdata()
       var arr=fdata.filter((value)=>{
@@ -210,15 +210,11 @@ const requestTwo = axios.get("https://rest.coinapi.io/v1/exchanges/icons/32?apik
     //
  function handleChange(e){
    if(e.target.value==="low"){
-     var arr4=fdata1.sort(function(a,b){
-       return a.volume_1day_usd-b.volume_1day_usd;
-     })
+     var arr4=fdata1.sort((a,b)=>a.volume_1day_usd-b.volume_1day_usd);
      setData1(arr4)
    }
    else if(e.target.value==="high"){
-    var arr5=fdata1.sort(function(a,b){
-      return b.volume_1day_usd-a.volume_1day_usd;
-    })
+    var arr5=fdata1.sort((a,b)=>b.volume_1day_usd-a.volume_1day_usd);
     setData1(arr5)
   }
  }
@@ -236,7 +232,7 @@ const requestTwo = axios.get("https://rest.coinapi.io/v1/exchanges/icons/32?apik
       }>Search</button>
       
       </div>
-      <select id="sortb" onChange={handleChange}>
+      <select id="sortb" onChange={(e)=>{handleChange(e)}}>
         <option value="">Sort by trade volume</option>
         <option value="low">Low to high</option>
         <option value="high">High to low</option>
