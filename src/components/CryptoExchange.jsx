@@ -179,7 +179,7 @@ const requestTwo = axios.get("https://rest.coinapi.io/v1/exchanges/icons/32?apik
         setData(arr3);
     }))
 }
-//  console.log(fdata1)
+
     const handleSearch=()=>{
       getdata()
       var arr=fdata.filter((value)=>{
