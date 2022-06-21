@@ -131,7 +131,7 @@ p{
   align-items: center;
   justify-content: space-between;
   flex-direction: row;
-  /* border: 2px solid blue; */
+
 
 }
 #sortb{
@@ -220,7 +220,7 @@ const requestTwo = axios.get("https://rest.coinapi.io/v1/exchanges/icons/32?apik
     setData1(arr5)
   }
  }
-//  console.log(fdata1)
+
 
   return (
     <ResultDiv>
